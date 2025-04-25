@@ -4,6 +4,8 @@ import polygon
 from utils import map_aggregate_bars_to_dates, get_month_before, get_start_and_end_of_month
 from datetime import date
 import sys
+from icecream import ic
+ic.disable()
 
 # This is so we can expand to other tickers later, defaults to NVDA if no argument is passed
 parser = argparse.ArgumentParser()
@@ -52,13 +54,20 @@ except FileNotFoundError:
     month_to_get = get_month_before(todays_month)
 # get the start and end dates of the month
 month_start, month_end = get_start_and_end_of_month(month_to_get)
+
+ic(month_start, month_end)
+
 # pull date from polygon
 aggregates = polygon_client.get_aggregate_bars(
     ticker, month_start, month_end,
     multiplier=30, timespan="minute",
     full_range=True, max_concurrent_workers=1,
-    run_parallel=True, warnings=False
+    run_parallel=True, warnings=True
 )
+
+ic(aggregates)
+
+ic(map_aggregate_bars_to_dates(bars=aggregates, month=month_to_get, convert_to_bytes_json=False))
 
 # convert our aggregates into a bytes json
 bytes_json = map_aggregate_bars_to_dates(bars=aggregates, month=month_to_get, convert_to_bytes_json=True)
