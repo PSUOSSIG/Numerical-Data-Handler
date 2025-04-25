@@ -1,0 +1,4 @@
+holidays~=0.67
+boto3~=1.37.2
+polygon~=1.2.6
+icecream~=2.1.4
